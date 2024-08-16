@@ -1,10 +1,9 @@
 "use client";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Cards from "@/components/Cards";
-
-import { useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 export default function DisplayCard({ title }) {
   // sample data
@@ -81,7 +80,9 @@ export default function DisplayCard({ title }) {
                 className="embla__prev"
                 onClick={scrollPrev}
               >
-                <Typography>Prev</Typography>
+                <Typography>
+                  <FaArrowLeft />
+                </Typography>
               </Button>
               <Box
                 width="100%"
@@ -121,7 +122,9 @@ export default function DisplayCard({ title }) {
                 className="embla__next"
                 onClick={scrollNext}
               >
-                <Typography>Next</Typography>
+                <Typography>
+                  <FaArrowRight />
+                </Typography>
               </Button>
             </Stack>
           </Box>
