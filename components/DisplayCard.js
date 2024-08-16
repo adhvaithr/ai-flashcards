@@ -1,14 +1,29 @@
 "use client";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import Cards from "@/components/Cards";
 
-export default function DisplayCard({ tittle }) {
+import { useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+
+export default function DisplayCard({ title }) {
   // sample data
   const [data, setData] = useState([
     { front: "front1", back: "back1" },
-    // { front: "front2", back: "back2" },
+    { front: "front2", back: "back2" },
   ]);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  // get the all the flashcards from the db
 
   return (
     <Box
@@ -37,7 +52,7 @@ export default function DisplayCard({ tittle }) {
           spacing={2}
         >
           <Box width="100%" height="10%">
-            <Typography variant="h2">{tittle}</Typography>
+            <Typography variant="h2">{title}</Typography>
           </Box>
           <Box
             width="100%"
@@ -47,19 +62,68 @@ export default function DisplayCard({ tittle }) {
             justifyContent="center"
             alignItems="center"
           >
-            {data.map((item, index) => (
+            <Stack
+              width="100%"
+              height="75%"
+              display="flex"
+              flexDirection="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={2}
+            >
+              <Button
+                sx={{
+                  color: "black",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                className="embla__prev"
+                onClick={scrollPrev}
+              >
+                <Typography>Prev</Typography>
+              </Button>
               <Box
-                key={index}
-                width="60%"
-                height="60%"
+                width="100%"
+                height="100%"
                 display="flex"
-                flexDirection="column"
                 justifyContent="center"
                 alignItems="center"
+                className="embla"
               >
-                <Cards front={item.front} back={item.back} />
+                <Box
+                  width="100%"
+                  height="100%"
+                  flexDirection="column"
+                  className="embla__viewport"
+                  ref={emblaRef}
+                >
+                  <Box width="100%" height="100%" className="embla__container">
+                    {data.map((item, index) => (
+                      <Box
+                        className="embla__slide"
+                        key={index}
+                        width="100%"
+                        height="100%"
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <Cards front={item.front} back={item.back} />
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
               </Box>
-            ))}
+              <Button
+                sx={{ color: "black" }}
+                className="embla__next"
+                onClick={scrollNext}
+              >
+                <Typography>Next</Typography>
+              </Button>
+            </Stack>
           </Box>
         </Stack>
       </Box>
